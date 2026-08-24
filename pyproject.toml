@@ -1,0 +1,36 @@
+[project]
+name = "aa056-nucleardata"
+version = "0.1.0"
+description = "Nuclear Data Aggregation Project"
+readme = "README.md"
+# Pinned to one interpreter deliberately. This project's test strategy is
+# bit-exact numerical parity fixtures (tests/fixtures/parity/) and byte-exact
+# CSV (tests/fixtures/v8_number_strings.json). A floor alone let the venv run
+# 3.11/NumPy 2.4.6 while the container ran 3.12/NumPy 2.5.2 - so the fixtures
+# validated a stack that never shipped. One version, tested and shipped.
+requires-python = ">=3.14"
+dependencies = [
+    "fastapi>=0.139.0",
+    "uvicorn[standard]>=0.51.0",
+    # Dash's `fastapi` extra selects dash.backends._fastapi (a native ASGI
+    # backend), so the Dash UI shares one process with the FastAPI API.
+    # Upper-bounded because a major bump could change server detection or
+    # pathname-prefix handling - see tests/test_dash_smoke.py.
+    "dash[fastapi]>=4.4,<5",
+    "plotly>=5.24",
+    "numpy>=2.0",
+    # Direct dependency, not an implementation detail of FastAPI:
+    # `charts.CrossSectionQuery` is a pydantic model and the comparison-shape
+    # invariant lives in its validators. Declared so a FastAPI bump that moved
+    # its pydantic floor cannot break this app with nothing in the lockfile to
+    # explain it. Starlette is deliberately NOT declared - the two symbols this
+    # app uses (GZipMiddleware, run_in_threadpool) are imported through
+    # FastAPI's public re-exports, keeping the ASGI plumbing FastAPI's concern.
+    "pydantic>=2.9",
+]
+
+[dependency-groups]
+# Test-only; never installed into the production image.
+dev = [
+    "httpx>=0.27",
+]

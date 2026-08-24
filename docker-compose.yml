@@ -1,0 +1,38 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: nuclear-backend
+    ports:
+      # 8080 was the nginx container's port before cutover. Keeping it means
+      # the public URL never changed. /docs is on the same port now.
+      - "8080:8000"
+    environment:
+      # How many users may have a JANIS query running at once. Each slot is
+      # a `java -jar Janis.jar` JVM, so this is the memory dial: raise it if
+      # the host has headroom, drop it to 1 on a small box. Users over the
+      # limit queue for a slot rather than being refused.
+      JANIS_MAX_CONCURRENT_QUERIES: "${JANIS_MAX_CONCURRENT_QUERIES:-2}"
+      SERIES_CACHE_SIZE: "${SERIES_CACHE_SIZE:-16}"
+      ENABLE_DASH: "${ENABLE_DASH:-1}"
+      DASH_URL_PREFIX: "${DASH_URL_PREFIX:-/}"
+      DASH_REQUESTS_PREFIX: "${DASH_REQUESTS_PREFIX:-}"
+      QUERY_CACHE_TTL_SECONDS: "${QUERY_CACHE_TTL_SECONDS:-1800}"
+      QUERY_CACHE_MAX_ENTRIES: "${QUERY_CACHE_MAX_ENTRIES:-32}"
+      QUERY_CACHE_MAX_MB: "${QUERY_CACHE_MAX_MB:-256}"
+      # This repo ships no proxy of its own any more, so this budget is the
+      # only timeout lever under our control. It must stay BELOW the smallest
+      # read timeout in whatever ingress fronts this service. See "Deployment
+      # limits" in README.md.
+      JANIS_QUERY_BUDGET_SECONDS: "${JANIS_QUERY_BUDGET_SECONDS:-180}"
+    # No healthcheck here on purpose: it is defined once in backend/Dockerfile.
+    # A compose healthcheck overrides the image's entirely, so restating it
+    # meant two copies that could drift with nothing to catch it.
+    deploy:
+      # Pinned to 1. The JANIS gates and the query cache are process-local,
+      # so N replicas allow N x JANIS_MAX_CONCURRENT_QUERIES. Scaling out
+      # requires replacing BOTH the cache backend and the JANIS gate with
+      # shared implementations - see backend/deployment.py.
+      replicas: 1
+    restart: unless-stopped

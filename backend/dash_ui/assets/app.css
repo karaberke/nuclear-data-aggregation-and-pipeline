@@ -1,0 +1,544 @@
+:root {
+  --accent: #0a84ff;
+  --accent-dark: #0060df;
+  --bg: #f5f5f7;
+  --surface: rgba(255, 255, 255, 0.82);
+  --border: rgba(0, 0, 0, 0.09);
+  --text: #1d1d1f;
+  --muted: #6e6e73;
+  --danger: #d70015;
+  --radius-lg: 20px;
+  --radius-md: 12px;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.04),
+    0 10px 32px rgba(0, 0, 0, 0.07);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  padding: 3rem 1.5rem;
+  background:
+    radial-gradient(circle at 15% 10%, rgba(10, 132, 255, 0.10), transparent 42%),
+    radial-gradient(circle at 85% 85%, rgba(191, 90, 242, 0.08), transparent 42%),
+    var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+header {
+  margin: 0 auto 2rem;
+  max-width: 1180px;
+  text-align: center;
+}
+
+h1,
+h2,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  margin-bottom: 0.35rem;
+  font-size: clamp(2rem, 4vw, 2.7rem);
+  letter-spacing: -0.035em;
+}
+
+h2 {
+  margin-bottom: 0.25rem;
+  font-size: 1.25rem;
+}
+
+.subtitle,
+.panel-heading p {
+  margin-bottom: 0;
+  color: var(--muted);
+}
+
+.wrapper {
+  display: grid;
+  gap: 1.25rem;
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.panel {
+  padding: 1.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(22px) saturate(150%);
+}
+
+.panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.35rem;
+  text-align: left;
+}
+
+.controls-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.selection-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
+}
+
+.filter-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.control {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.4rem;
+  color: var(--text);
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-align: left;
+}
+
+.control small {
+  min-height: 1.1em;
+  color: var(--muted);
+  font-size: 0.74rem;
+  font-weight: 400;
+}
+
+input {
+  width: 100%;
+  min-height: 42px;
+  padding: 0.6rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  outline: none;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--text);
+  font: inherit;
+}
+
+input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.14);
+}
+
+input:read-only {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.action-row,
+.chart-toolbar,
+.chart-tabs,
+.series-legend {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.action-row {
+  margin-top: 1.25rem;
+}
+
+button {
+  font: inherit;
+}
+
+button.action {
+  padding: 0.72rem 1.25rem;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 0.88rem;
+  font-weight: 650;
+  transition: transform 0.15s ease, opacity 0.2s ease, box-shadow 0.2s ease;
+}
+
+button.action:active {
+  transform: scale(0.97);
+}
+
+button.action:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.run-button {
+  background: linear-gradient(180deg, var(--accent), var(--accent-dark));
+  color: white;
+  box-shadow: 0 3px 10px rgba(10, 132, 255, 0.3);
+  /* The label swaps to "Running…" while a query is in flight (see the
+     `running=` spec on C6). Without a floor the pill visibly shrinks by six
+     characters mid-query and the whole action row reflows. */
+  min-width: 11rem;
+}
+
+.export-button,
+.reset-button {
+  background: rgba(0, 0, 0, 0.06);
+  color: var(--text);
+}
+
+.action.export-processed-button {
+  background: rgba(10, 132, 255, 0.12);
+  color: var(--accent-dark);
+  border: 1px solid rgba(10, 132, 255, 0.35);
+}
+
+#status-line {
+  min-height: 1.2rem;
+  margin-top: 1rem;
+  color: var(--muted);
+  font-size: 0.82rem;
+  text-align: center;
+}
+
+#status-line.error {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+#selection-summary {
+  margin: 0.75rem 0 0;
+  padding: 1rem;
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.65);
+  color: var(--muted);
+  font: 0.78rem/1.55 ui-monospace, SFMono-Regular, Menlo, monospace;
+  text-align: left;
+  white-space: pre-wrap;
+}
+
+.chart-tabs {
+  margin: 1.2rem 0 0.8rem;
+}
+
+.chart-toolbar {
+  min-height: 68px;
+  padding: 0.75rem;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.48);
+}
+
+.compact-control,
+.range-control {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.range-control input {
+  width: 150px;
+  min-height: auto;
+  padding: 0;
+}
+
+.bin-controls-group {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+#bin-edges {
+  width: 220px;
+}
+
+.series-legend {
+  margin: 0.9rem 0 0.4rem;
+}
+
+/* `.legend-item` itself is styled further down, under
+   `.series-legend label.legend-item` - the dcc.Checklist labelClassName only
+   ever renders inside `.series-legend`, and that rule is a strict superset of
+   what used to be duplicated here. */
+
+.legend-swatch {
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+}
+
+.chart-notice {
+  min-height: 1.2rem;
+  color: var(--muted);
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+/* The chart container is styled in the Dash section below, on
+   `.chart-container` - the SPA's `#chart-container` id is not rendered here.
+   The empty-state text is a Plotly annotation from `figures.message_figure`,
+   not a `.placeholder` element. */
+
+/* ------------------------------------------------------------------ *
+ * Dash-specific rules.
+ *
+ * Everything above this line is the port of the SPA's style.css and should
+ * stay visually identical to it. Below are the overrides the Dash component
+ * set needs: dcc.Dropdown renders a react-select widget rather
+ * than a native <select>, the series legend is a dcc.Checklist rather than
+ * a row of <button>s, and dcc.Graph replaces the Vega container.
+ * ------------------------------------------------------------------ */
+
+/* Panel stacking.
+ *
+ * `.panel` sets `backdrop-filter`, which makes every panel its own stacking
+ * context. An open dropdown menu is therefore trapped inside its panel no
+ * matter how high its own z-index is, and the NEXT panel - a later sibling,
+ * also a stacking context - paints straight over it. Menus that opened past
+ * a panel's bottom edge were disappearing behind the panel below.
+ *
+ * Ordering the panels back-to-front puts every menu above whatever follows
+ * it, and keeps the frosted-glass effect. Painting order is by DOM position
+ * without this, which is exactly the wrong way round for popups.
+ */
+.panel {
+  position: relative;
+}
+
+.selection-panel {
+  z-index: 3;
+}
+
+.analysis-panel {
+  z-index: 2;
+}
+
+.chart-panel {
+  z-index: 1;
+}
+
+/* dcc.Dropdown - match the native input styling above.
+   Dash 4 renders a Radix listbox (`.dash-dropdown-*`), not the react-select
+   widget earlier revisions of this file targeted with `.Select-control`. */
+.dash-dropdown {
+  min-height: 42px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.92);
+  font: inherit;
+}
+
+.dash-dropdown:focus-visible {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.14);
+  outline: none;
+}
+
+.dash-dropdown:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.compact-control .dash-dropdown {
+  min-height: 34px;
+}
+
+/* Open dropdown menu: keep the sticky search header opaque across its whole
+ * width.
+ *
+ * Dash 4 makes `.dash-dropdown-search-container` `position: sticky` inside
+ * `.dash-dropdown-content` (which is the scrollport), but insets it with
+ * `top: 8px` and `margin: 8px`. A sticky element only covers its own border
+ * box, so the 8px band above the bar and the 8px gutters either side stay
+ * uncovered, and options scrolling past remain visible in them - reading as
+ * options passing underneath a see-through search bar.
+ *
+ * Nothing is layered wrongly and the bar is not translucent: Dash already
+ * gives it `background: #fff`, and the option rows are unpositioned, so the
+ * sticky bar does paint above them. It simply does not span the area they
+ * scroll through. Making it full-bleed closes that gap.
+ *
+ * Two-class specificity is deliberate. `async-dropdown.js` is a lazily loaded
+ * chunk that injects Dash's own rules the first time a menu opens - possibly
+ * after this stylesheet - so a single-class override could lose the tie on
+ * source order. This wins on specificity instead of resorting to !important.
+ */
+.dash-dropdown-content .dash-dropdown-search-container {
+  top: 0;
+  margin: 0;
+  padding: 0.5rem 0.65rem;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+  /* Opaque on purpose. NOT var(--surface) and NOT the .dash-dropdown trigger's
+     fill - both are rgba() with alpha < 1, which would reintroduce exactly the
+     symptom this rule exists to fix. */
+  background: #fff;
+  /* Not needed today - options are unpositioned - but keeps the bar correct if
+     a future Dash version positions the option rows. */
+  z-index: 1;
+}
+
+/* The bottom border replaces the box outline as the separator, so Dash's
+   `:focus-within` affordance has to be restored or tabbing into the search
+   field loses its indicator entirely. */
+.dash-dropdown-content .dash-dropdown-search-container:focus-within {
+  border-bottom-color: var(--accent);
+  box-shadow: inset 0 -2px 0 0 var(--accent);
+  outline: none;
+}
+
+/* Series legend: a dcc.Checklist styled as the original pill buttons.
+   `.legend-item` is labelClassName, `.legend-check` is inputClassName. */
+.series-legend label.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0.42rem 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: white;
+  color: var(--text);
+  cursor: pointer;
+  font-size: 0.78rem;
+  /* Unchecked == hidden series, matching the old .hidden-series styling. */
+  opacity: 0.38;
+  text-decoration: line-through;
+  transition: opacity 0.15s ease;
+}
+
+.series-legend label.legend-item:has(input.legend-check:checked) {
+  opacity: 1;
+  text-decoration: none;
+}
+
+.series-legend input.legend-check {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.series-legend label.legend-item:has(input.legend-check:focus-visible) {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.14);
+}
+
+/* dcc.Tabs styled as the original .chart-tabs pills. */
+.chart-tabs .tab {
+  padding: 0.55rem 1rem !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 999px !important;
+  background: rgba(255, 255, 255, 0.7) !important;
+  color: var(--muted) !important;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.chart-tabs .tab--selected {
+  border-color: var(--accent) !important;
+  background: rgba(10, 132, 255, 0.1) !important;
+  color: var(--accent-dark) !important;
+}
+
+/* The graph lives in its own panel below the controls panel. */
+.chart-panel {
+  min-width: 0;
+}
+
+/* dcc.Graph sits inside the chart container. */
+.chart-container {
+  display: flex;
+  min-height: 460px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 1rem;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.82);
+}
+
+/* dcc.Loading wraps its children in a plain div, which as a flex child would
+   size to content and leave the graph narrower than the panel. */
+.chart-container > div {
+  width: 100%;
+  min-width: 0;
+}
+
+.chart-container .dash-graph,
+.chart-container .js-plotly-plot {
+  width: 100%;
+}
+
+/* dcc.Slider readouts replace the old <output> elements.
+ *
+ * Dash 4's slider is `.dash-slider-container` (a Radix slider plus a number
+ * box), not `rc-slider`. It has no intrinsic width, so inside the flex
+ * `.range-control` it collapsed to the width of its thumb - the slider
+ * rendered as a bare dot with a tooltip and no track. */
+.dash-slider-container {
+  width: 260px;
+  margin: 0 0.5rem;
+}
+
+.dash-slider-wrapper {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.chart-error {
+  min-height: 1.2rem;
+  color: var(--danger);
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+@media (max-width: 850px) {
+  .selection-grid,
+  .filter-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  body {
+    padding: 1.5rem 0.75rem;
+  }
+
+  .panel {
+    padding: 1.1rem;
+  }
+
+  .selection-grid,
+  .filter-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .panel-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

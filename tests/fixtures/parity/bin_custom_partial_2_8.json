@@ -1,0 +1,1 @@
+{"edges":[2,8],"xScale":"linear","excludedNonpositive":0,"records":[{"series_key":"DB|H1|MT1","group_index":0,"bin_start":2,"bin_end":8,"bin_width":6,"bin_center":5,"point_count":0,"cross_section_mean":null,"cross_section_group_average":5,"cross_section_integral":30,"coverage_fraction":1}]}

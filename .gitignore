@@ -1,0 +1,22 @@
+# Environments
+.venv/
+__pycache__/
+*.pyc
+
+# Tool caches. ruff is run ad hoc here (there is no [tool.ruff] config and it
+# is not a declared dev dependency), so its cache must never be committed.
+.ruff_cache/
+.DS_Store
+
+# A pnpm store was committed here once, before the Node toolchain was
+# removed. Cheap insurance against a repeat.
+.pnpm-store/
+
+#Artifacts of the Output
+output/
+*.csv
+docs/
+CLAUDE.md
+.Claude
+
+.env
