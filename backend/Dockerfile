@@ -13,10 +13,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN java -version
 
-# --- Corporate root + intermediate CA bundle so HTTPS requests inside the
-# container aren't rejected as untrusted by TLS-inspecting proxies ---
-COPY corporate-ca-bundle.pem /usr/local/share/ca-certificates/corporate-ca-bundle.crt
-RUN update-ca-certificates
 
 # --- Install uv ---
 # Version-pinned, not :latest. Everything else here is pinned hard
