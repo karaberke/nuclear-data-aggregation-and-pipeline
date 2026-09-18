@@ -323,7 +323,7 @@ docker image prune         # untagged leftover images
 ## Testing it
 
 ```bash
-uv run python -m unittest discover -s tests -v      # everything (278 tests)
+uv run python -m unittest discover -s tests -v      # everything (297 tests)
 ```
 
 Useful variations:
